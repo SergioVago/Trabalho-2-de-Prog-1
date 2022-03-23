@@ -34,7 +34,7 @@ pegarDistanciaTotal distancias =
 
 pegarCustoTotalDasDiarias :: [Local] -> Int
 pegarCustoTotalDasDiarias locais =
-  foldl (\acc diaria -> acc + (custoDaDiaria diaria)) 0 (tail locais)
+  foldl (\acc local -> acc + (custoDaDiaria local)) 0 (tail locais)
 
 pegarCustoDaViagem :: [(Float, Float)] -> [Float]
 pegarCustoDaViagem distanciasECustoPorKM =

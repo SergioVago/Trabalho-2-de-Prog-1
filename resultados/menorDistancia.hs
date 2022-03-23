@@ -74,11 +74,11 @@ pegarNomeDosLocais locaisEDistancias =
 
 pegarCustosDaDiariaDosLocais :: [(Local, Float)] -> [Int]
 pegarCustosDaDiariaDosLocais locaisEDistancias =
-  map (\(local, distancia) -> custoDaDiaria local) locaisEDistancias
+  map (\(local, distancia) -> custoDaDiaria local) $ tail locaisEDistancias
 
 pegarCustosDaDiariaTotal :: [Int] -> Int
 pegarCustosDaDiariaTotal custosDaDiaria =
-  foldl (\acc x -> acc + x) 0 custosDaDiaria
+  foldr (\acc custoDaDiaria -> acc + custoDaDiaria) 0 custosDaDiaria
 
 pegarCustosDaViagem :: [[Float]] -> [(Local, Float)] -> [Float]
 pegarCustosDaViagem _ [] = []
