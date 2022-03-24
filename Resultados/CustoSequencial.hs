@@ -22,38 +22,28 @@ calculaDistanciaEmOrdemSequencial matrizDeCustoPorKM (localAtual : proximoLocal 
 
 calculaCustoDaViagem :: [[Float]] -> Int -> Int -> Float -> Float
 calculaCustoDaViagem matrizDeCustoPorKM i j distancia =
-  ((matrizDeCustoPorKM !! i !! j) * distancia)
+  matrizDeCustoPorKM !! i !! j * distancia
 
 pegarDistancias :: [(Float, Float)] -> [Float]
-pegarDistancias distanciasECustoPorKM =
-  map (\(distancia, custo) -> distancia) distanciasECustoPorKM
+pegarDistancias = map fst
 
-pegarDistanciaTotal :: [Float] -> Float
-pegarDistanciaTotal distancias =
-  foldl (\acc distancia -> acc + distancia) 0 distancias
-
-pegarCustoTotalDasDiarias :: [Local] -> Int
+pegarCustoTotalDasDiarias :: [Local] -> [Int]
 pegarCustoTotalDasDiarias locais =
-  foldl (\acc local -> acc + (custoDaDiaria local)) 0 (tail locais)
+  map custoDaDiaria (tail locais)
 
 pegarCustoDaViagem :: [(Float, Float)] -> [Float]
-pegarCustoDaViagem distanciasECustoPorKM =
-  map (\(distancia, custo) -> custo) distanciasECustoPorKM
-
-pegarCustoTotalDaViagem :: [Float] -> Float
-pegarCustoTotalDaViagem custosPorViagem =
-  foldl (\acc custoPorViagem -> acc + custoPorViagem) 0 custosPorViagem
+pegarCustoDaViagem = map snd
 
 calculaOCustoSequencial :: [[Float]] -> [Local] -> ResultadoTotal
 calculaOCustoSequencial matrizDeCustoPorKM locais = do
   let distanciasECustosPorViagem = calculaDistanciaEmOrdemSequencial matrizDeCustoPorKM locais
-  let distanciaTotal = pegarDistanciaTotal $ pegarDistancias distanciasECustosPorViagem
-  let custoTotalDaViagem = pegarCustoTotalDaViagem $ pegarCustoDaViagem distanciasECustosPorViagem
-  let custoTotalDasDiarias = fromIntegral $ pegarCustoTotalDasDiarias locais
-  let sequenciaDasCidades = map (\local -> nome local) locais
+  let distanciaTotal = sum $ pegarDistancias distanciasECustosPorViagem
+  let custoTotalDaViagem = sum $ pegarCustoDaViagem distanciasECustosPorViagem
+  let custoTotalDasDiarias = fromIntegral $ sum $ pegarCustoTotalDasDiarias locais
+  let sequenciaDasCidades = map nome locais
 
   ResultadoTotal
-    { distanciaTotal = pegarDistanciaTotal $ pegarDistancias distanciasECustosPorViagem,
-      custoTotal = (custoTotalDaViagem + custoTotalDasDiarias),
+    { distanciaTotal = distanciaTotal,
+      custoTotal = custoTotalDaViagem + custoTotalDasDiarias,
       sequenciaDasCidades = sequenciaDasCidades
     }

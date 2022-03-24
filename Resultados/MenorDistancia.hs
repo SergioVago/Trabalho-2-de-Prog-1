@@ -42,7 +42,7 @@ encontraOProximoLocalEDistanciaMaisPerto locais distancias = do
   let distanciaEIndiceInvertido = encontraAMenorDistaciaESeuIndiceComOIndiceInvertido distancias
   let distancia = fst distanciaEIndiceInvertido
   let indice = snd distanciaEIndiceInvertido
-  let local = (reverse locais) !! indice
+  let local = reverse locais !! indice
 
   (local, distancia)
 
@@ -52,8 +52,8 @@ pegarDistanciasESequenciaDasCidades _ [ultimoLocal] = [(ultimoLocal, 0)]
 pegarDistanciasESequenciaDasCidades (localAtual, indiceDoLocalAtual) locais = do
   let (_, proximosLocais) = splitAt (indiceDoLocalAtual + 1) locais
 
-  if ((length proximosLocais) == 0)
-    then (localAtual, 0) : []
+  if null proximosLocais
+    then [(localAtual, 0)]
     else do
       let distancias = calculaDistanciasDoLocalAtualParaOsProximosLocais localAtual proximosLocais
       let (proximoLocal, distancia) = encontraOProximoLocalEDistanciaMaisPerto proximosLocais distancias
@@ -61,24 +61,20 @@ pegarDistanciasESequenciaDasCidades (localAtual, indiceDoLocalAtual) locais = do
       (localAtual, distancia) : pegarDistanciasESequenciaDasCidades (proximoLocal, indice) proximosLocais
 
 pegarDistancias :: [(Local, Float)] -> [Float]
-pegarDistancias locaisEDistancias =
-  map (\(local, distancia) -> distancia) locaisEDistancias
+pegarDistancias = map snd
 
 pegarDistanciaTotal :: [Float] -> Float
-pegarDistanciaTotal distancias =
-  foldl (\acc x -> acc + x) 0 distancias
+pegarDistanciaTotal = sum
 
 pegarNomeDosLocais :: [(Local, Float)] -> [String]
-pegarNomeDosLocais locaisEDistancias =
-  map (\(local, distancia) -> nome local) locaisEDistancias
+pegarNomeDosLocais = map (\(local, distancia) -> nome local)
 
 pegarCustosDaDiariaDosLocais :: [(Local, Float)] -> [Int]
 pegarCustosDaDiariaDosLocais locaisEDistancias =
   map (\(local, distancia) -> custoDaDiaria local) $ tail locaisEDistancias
 
 pegarCustosDaDiariaTotal :: [Int] -> Int
-pegarCustosDaDiariaTotal custosDaDiaria =
-  foldr (\acc custoDaDiaria -> acc + custoDaDiaria) 0 custosDaDiaria
+pegarCustosDaDiariaTotal = sum
 
 pegarCustosDaViagem :: [[Float]] -> [(Local, Float)] -> [Float]
 pegarCustosDaViagem _ [] = []
@@ -86,15 +82,14 @@ pegarCustosDaViagem _ [_] = []
 pegarCustosDaViagem
   matrizDeCustoPorKM
   ((cidadeAtual, distancia) : (proximaCidade, _) : distanciasESequenciaDasCidades) =
-    (matrizDeCustoPorKM !! indice cidadeAtual !! indice proximaCidade) * distancia :
+    matrizDeCustoPorKM !! indice cidadeAtual !! indice proximaCidade * distancia :
     pegarCustosDaViagem matrizDeCustoPorKM distanciasESequenciaDasCidades
 
 pegarCustoTotalDaViagem :: [Float] -> Float
-pegarCustoTotalDaViagem custosDaViagem =
-  foldl (\acc custoDaViagem -> acc + custoDaViagem) 0 custosDaViagem
+pegarCustoTotalDaViagem = sum
 
 calculaOCustoPelaMenorDistancia :: [[Float]] -> [Local] -> ResultadoTotal
-calculaOCustoPelaMenorDistancia matrizDeCustoPorKM locais = do
+calculaOCustoPelaMenorDistancia matrizDeCustoPorKM locais =
   ResultadoTotal
     { distanciaTotal = distanciaTotal,
       custoTotal = custoTotal,
@@ -107,4 +102,4 @@ calculaOCustoPelaMenorDistancia matrizDeCustoPorKM locais = do
     custoDaViagem = pegarCustoTotalDaViagem $ pegarCustosDaViagem matrizDeCustoPorKM locaisEDistancias
     distanciaTotal = pegarDistanciaTotal $ pegarDistancias locaisEDistancias
     custoDasDiarias = pegarCustosDaDiariaTotal $ pegarCustosDaDiariaDosLocais locaisEDistancias
-    custoTotal = (fromIntegral custoDasDiarias) + custoDaViagem
+    custoTotal = fromIntegral custoDasDiarias + custoDaViagem

@@ -24,9 +24,8 @@ processaArquivosERetornaOsResultados
     writeFile "saida.txt" $ formataASaida resultados
 
 geraMatrizDeCustoPorKM :: [String] -> [[Float]]
-geraMatrizDeCustoPorKM [] = []
-geraMatrizDeCustoPorKM (linha : matrizDeCustoPorKMBruto) =
-  converteArrayDeStringEmArrayDeFloat (words linha) : geraMatrizDeCustoPorKM matrizDeCustoPorKMBruto
+geraMatrizDeCustoPorKM =
+  map (converteArrayDeStringEmArrayDeFloat . words)
 
 converteArrayDeStringEmArrayDeFloat :: [String] -> [Float]
 converteArrayDeStringEmArrayDeFloat [] = []
@@ -46,6 +45,6 @@ formataASaida :: [ResultadoTotal] -> String
 formataASaida resultados =
   imprimeDistanciaECusto custoSequencial ++ imprimeSequenciaDasCidadesEDistanciaECusto menorDistancia ++ imprimeSequenciaDasCidadesEDistanciaECusto menorCusto
   where
-    custoSequencial = resultados !! 0
+    custoSequencial = head resultados
     menorDistancia = resultados !! 1
     menorCusto = resultados !! 2

@@ -16,13 +16,14 @@ data Local = Local
 converteNomeECoordenadasECustoDaDiariaEmLocais :: Int -> [String] -> [String] -> [Local]
 converteNomeECoordenadasECustoDaDiariaEmLocais _ [] _ = []
 converteNomeECoordenadasECustoDaDiariaEmLocais _ _ [] = []
-converteNomeECoordenadasECustoDaDiariaEmLocais 
+converteNomeECoordenadasECustoDaDiariaEmLocais _ [_] (_:_) = []
+converteNomeECoordenadasECustoDaDiariaEmLocais
   indice
   (nome : coordenadasBrutas : restoDosNomesECordenadas)
   (custoDaDiaria : restoDosCustosDasDiarias) = do
 
   let arrayCoordenadas = words coordenadasBrutas
-  let coordenadas = (read (arrayCoordenadas !! 0) :: Int, read (arrayCoordenadas !! 1) :: Int) 
+  let coordenadas = (read (head arrayCoordenadas) :: Int, read (arrayCoordenadas !! 1) :: Int)
   let inteiroCustoDaDiaria = read custoDaDiaria :: Int
 
   Local {
