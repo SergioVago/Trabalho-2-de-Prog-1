@@ -48,26 +48,26 @@ encontraOProximoLocalComMenorCusto locais custosEDistancias = do
 pegarCustosEDistanciaESequenciaDasCidades :: [[Float]] -> (Local, Int) -> [Local] -> [(Local, (Float, Float))]
 pegarCustosEDistanciaESequenciaDasCidades _ _ [] = []
 pegarCustosEDistanciaESequenciaDasCidades _ _ [ultimoLocal] = [(ultimoLocal, (0, 0))]
-pegarCustosEDistanciaESequenciaDasCidades matrizDeCustoPorKM (localAtual, indiceDoLocalAtual) locais = do
+pegarCustosEDistanciaESequenciaDasCidades matrizDeCustoPorKm (localAtual, indiceDoLocalAtual) locais = do
   let (_, proximosLocais) = splitAt (indiceDoLocalAtual + 1) locais
 
   if null proximosLocais
     then [(localAtual, (0, 0))]
     else do
-      let custosEDistanciaDaViagem = calculaCustoDaViagemDoLocalAtualParaOsProximosLocais matrizDeCustoPorKM localAtual proximosLocais
+      let custosEDistanciaDaViagem = calculaCustoDaViagemDoLocalAtualParaOsProximosLocais matrizDeCustoPorKm localAtual proximosLocais
       let (proximoLocal, (custo, distancia)) = encontraOProximoLocalComMenorCusto proximosLocais custosEDistanciaDaViagem
       let indice = fromJust $ elemIndex proximoLocal proximosLocais
 
-      (localAtual, (custo, distancia)) : pegarCustosEDistanciaESequenciaDasCidades matrizDeCustoPorKM (proximoLocal, indice) proximosLocais
+      (localAtual, (custo, distancia)) : pegarCustosEDistanciaESequenciaDasCidades matrizDeCustoPorKm (proximoLocal, indice) proximosLocais
 
 calculaCustoDaViagemDoLocalAtualParaOsProximosLocais :: [[Float]] -> Local -> [Local] -> [(Float, Float)]
 calculaCustoDaViagemDoLocalAtualParaOsProximosLocais _ _ [] = []
-calculaCustoDaViagemDoLocalAtualParaOsProximosLocais matrizDeCustoPorKM localAtual (possivelProximoLocal : locais) = do
+calculaCustoDaViagemDoLocalAtualParaOsProximosLocais matrizDeCustoPorKm localAtual (possivelProximoLocal : locais) = do
   let distancia = calculaDistancia (coordenadas localAtual) (coordenadas possivelProximoLocal)
   let diaria = custoDaDiaria possivelProximoLocal
-  let custoTotal = ((matrizDeCustoPorKM !! indice localAtual !! indice possivelProximoLocal) * distancia) + fromIntegral diaria
+  let custoTotal = ((matrizDeCustoPorKm !! indice localAtual !! indice possivelProximoLocal) * distancia) + fromIntegral diaria
 
-  (custoTotal, distancia) : calculaCustoDaViagemDoLocalAtualParaOsProximosLocais matrizDeCustoPorKM localAtual locais
+  (custoTotal, distancia) : calculaCustoDaViagemDoLocalAtualParaOsProximosLocais matrizDeCustoPorKm localAtual locais
 
 pegarNomeDosLocais :: [(Local, (Float, Float))] -> [String]
 pegarNomeDosLocais = map (\(local, _) -> nome local)
@@ -79,7 +79,7 @@ pegarDistancias :: [(Local, (Float, Float))] -> [Float]
 pegarDistancias = map (\(_, (_, distancia)) -> distancia)
 
 calculaAViagemPeloMenorCusto :: [[Float]] -> [Local] -> ResultadoTotal
-calculaAViagemPeloMenorCusto matrizDeCustoPorKM locais = do
+calculaAViagemPeloMenorCusto matrizDeCustoPorKm locais = do
   ResultadoTotal
     { distanciaTotal = distanciaTotal,
       custoTotal = custoTotal,
@@ -87,7 +87,7 @@ calculaAViagemPeloMenorCusto matrizDeCustoPorKM locais = do
     }
   where
     indiceInicial = 0
-    locaisECustosEDistancias = pegarCustosEDistanciaESequenciaDasCidades matrizDeCustoPorKM (locais !! indiceInicial, indiceInicial) locais
+    locaisECustosEDistancias = pegarCustosEDistanciaESequenciaDasCidades matrizDeCustoPorKm (locais !! indiceInicial, indiceInicial) locais
     sequenciaDasCidades = pegarNomeDosLocais locaisECustosEDistancias
     custoTotal = sum $ pegarCustosDaViagem locaisECustosEDistancias
     distanciaTotal = sum $ pegarDistancias locaisECustosEDistancias

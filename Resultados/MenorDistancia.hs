@@ -63,9 +63,6 @@ pegarDistanciasESequenciaDasCidades (localAtual, indiceDoLocalAtual) locais = do
 pegarDistancias :: [(Local, Float)] -> [Float]
 pegarDistancias = map snd
 
-pegarDistanciaTotal :: [Float] -> Float
-pegarDistanciaTotal = sum
-
 pegarNomeDosLocais :: [(Local, Float)] -> [String]
 pegarNomeDosLocais = map (\(local, distancia) -> nome local)
 
@@ -73,23 +70,21 @@ pegarCustosDaDiariaDosLocais :: [(Local, Float)] -> [Int]
 pegarCustosDaDiariaDosLocais locaisEDistancias =
   map (\(local, distancia) -> custoDaDiaria local) $ tail locaisEDistancias
 
-pegarCustosDaDiariaTotal :: [Int] -> Int
-pegarCustosDaDiariaTotal = sum
-
 pegarCustosDaViagem :: [[Float]] -> [(Local, Float)] -> [Float]
 pegarCustosDaViagem _ [] = []
 pegarCustosDaViagem _ [_] = []
 pegarCustosDaViagem
-  matrizDeCustoPorKM
-  ((cidadeAtual, distancia) : (proximaCidade, _) : distanciasESequenciaDasCidades) =
-    matrizDeCustoPorKM !! indice cidadeAtual !! indice proximaCidade * distancia :
-    pegarCustosDaViagem matrizDeCustoPorKM distanciasESequenciaDasCidades
-
-pegarCustoTotalDaViagem :: [Float] -> Float
-pegarCustoTotalDaViagem = sum
+  matrizDeCustoPorKm
+  ((cidadeAtual, distancia) : (proximaCidade, proximaDistancia) : distanciasESequenciaDasCidades) =
+    (custoPorKm * distancia)
+      + fromIntegral diaria :
+    pegarCustosDaViagem matrizDeCustoPorKm ((proximaCidade, proximaDistancia) : distanciasESequenciaDasCidades)
+    where
+      custoPorKm = matrizDeCustoPorKm !! indice cidadeAtual !! indice proximaCidade
+      diaria = custoDaDiaria proximaCidade
 
 calculaOCustoPelaMenorDistancia :: [[Float]] -> [Local] -> ResultadoTotal
-calculaOCustoPelaMenorDistancia matrizDeCustoPorKM locais =
+calculaOCustoPelaMenorDistancia matrizDeCustoPorKm locais =
   ResultadoTotal
     { distanciaTotal = distanciaTotal,
       custoTotal = custoTotal,
@@ -99,7 +94,5 @@ calculaOCustoPelaMenorDistancia matrizDeCustoPorKM locais =
     indiceInicial = 0
     locaisEDistancias = pegarDistanciasESequenciaDasCidades (locais !! indiceInicial, indiceInicial) locais
     sequenciaDasCidades = pegarNomeDosLocais locaisEDistancias
-    custoDaViagem = pegarCustoTotalDaViagem $ pegarCustosDaViagem matrizDeCustoPorKM locaisEDistancias
-    distanciaTotal = pegarDistanciaTotal $ pegarDistancias locaisEDistancias
-    custoDasDiarias = pegarCustosDaDiariaTotal $ pegarCustosDaDiariaDosLocais locaisEDistancias
-    custoTotal = fromIntegral custoDasDiarias + custoDaViagem
+    distanciaTotal = sum $ pegarDistancias locaisEDistancias
+    custoTotal = sum $ pegarCustosDaViagem matrizDeCustoPorKm locaisEDistancias

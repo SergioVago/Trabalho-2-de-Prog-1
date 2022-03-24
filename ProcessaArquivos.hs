@@ -14,17 +14,17 @@ processaArquivosERetornaOsResultados
 
     let listaDeNomesECordenadas = lines nomesECordenadas
     let quantidadeDeLocais = length listaDeNomesECordenadas `div` 2 -- Divide por dois, pois cada duas linhas representam um Local
-    let (listaDeCustosDasDiarias, matrizDeCustoPorKMBruto) = splitAt quantidadeDeLocais (lines custosDasDiarias)
-    let matrizDeCustoPorKM = geraMatrizDeCustoPorKM matrizDeCustoPorKMBruto
+    let (listaDeCustosDasDiarias, matrizDeCustoPorKmBruto) = splitAt quantidadeDeLocais (lines custosDasDiarias)
+    let matrizDeCustoPorKm = geraMatrizDeCustoPorKm matrizDeCustoPorKmBruto
 
     let locais = converteNomeECoordenadasECustoDaDiariaEmLocais 0 listaDeNomesECordenadas listaDeCustosDasDiarias
 
-    let resultados = calculaResultados matrizDeCustoPorKM locais
+    let resultados = calculaResultados matrizDeCustoPorKm locais
 
     writeFile "saida.txt" $ formataASaida resultados
 
-geraMatrizDeCustoPorKM :: [String] -> [[Float]]
-geraMatrizDeCustoPorKM =
+geraMatrizDeCustoPorKm :: [String] -> [[Float]]
+geraMatrizDeCustoPorKm =
   map (converteArrayDeStringEmArrayDeFloat . words)
 
 converteArrayDeStringEmArrayDeFloat :: [String] -> [Float]

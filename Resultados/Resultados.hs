@@ -7,8 +7,8 @@ import Resultados.MenorCusto (calculaAViagemPeloMenorCusto)
 import Resultados.MenorDistancia (calculaOCustoPelaMenorDistancia)
 
 calculaResultados :: [[Float]] -> [Local] -> [ResultadoTotal]
-calculaResultados matrizDeCustoPorKM locais =
-  [ calculaOCustoSequencial matrizDeCustoPorKM locais,
-    calculaOCustoPelaMenorDistancia matrizDeCustoPorKM locais,
-    calculaAViagemPeloMenorCusto matrizDeCustoPorKM locais
+calculaResultados matrizDeCustoPorKm locais =
+  [ calculaOCustoSequencial matrizDeCustoPorKm locais,
+    calculaOCustoPelaMenorDistancia matrizDeCustoPorKm locais,
+    calculaAViagemPeloMenorCusto matrizDeCustoPorKm locais
   ]
