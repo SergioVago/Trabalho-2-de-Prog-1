@@ -4,7 +4,7 @@ import ProcessaArquivos (processaArquivosERetornaOsResultados)
 
 main :: IO ()
 main = do
-  let nomeCord = "bateria2/nome-coord.txt"
-  let diariaCusto = "bateria2/diaria-custo.txt"
+  let nomeCord = "nome-coord.txt"
+  let diariaCusto = "diaria-custo.txt"
 
   processaArquivosERetornaOsResultados nomeCord diariaCusto
