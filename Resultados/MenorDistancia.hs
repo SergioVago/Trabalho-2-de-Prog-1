@@ -62,7 +62,7 @@ pegarDistancias :: [(Local, Float)] -> [Float]
 pegarDistancias = map snd
 
 pegarNomeDosLocais :: [(Local, Float)] -> [String]
-pegarNomeDosLocais = map (\(local, distancia) -> nome local)
+pegarNomeDosLocais = map (\(local, _) -> nome local)
 
 pegarCustosDaDiariaDosLocais :: [(Local, Float)] -> [Int]
 pegarCustosDaDiariaDosLocais locaisEDistancias =
