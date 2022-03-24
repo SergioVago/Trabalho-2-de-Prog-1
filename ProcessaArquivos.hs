@@ -13,7 +13,7 @@ processaArquivosERetornaOsResultados
     custosDasDiarias <- readFile nomeDoArquivoDoCustosDasDiarias
 
     let listaDeNomesECordenadas = lines nomesECordenadas
-    let quantidadeDeLocais = (length listaDeNomesECordenadas) `div` 2 -- Divide por dois, pois cada duas linhas representam um Local
+    let quantidadeDeLocais = length listaDeNomesECordenadas `div` 2 -- Divide por dois, pois cada duas linhas representam um Local
     let (listaDeCustosDasDiarias, matrizDeCustoPorKMBruto) = splitAt quantidadeDeLocais (lines custosDasDiarias)
     let matrizDeCustoPorKM = geraMatrizDeCustoPorKM matrizDeCustoPorKMBruto
 
