@@ -40,8 +40,7 @@ encontraAMenorDistaciaESeuIndiceComOIndiceInvertido distancias = do
 encontraOProximoLocalEDistanciaMaisPerto :: [Local] -> [Float] -> (Local, Float)
 encontraOProximoLocalEDistanciaMaisPerto locais distancias = do
   let distanciaEIndiceInvertido = encontraAMenorDistaciaESeuIndiceComOIndiceInvertido distancias
-  let distancia = fst distanciaEIndiceInvertido
-  let indice = snd distanciaEIndiceInvertido
+  let (distancia, indice) = distanciaEIndiceInvertido
   let local = reverse locais !! indice
 
   (local, distancia)

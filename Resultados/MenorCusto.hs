@@ -87,7 +87,8 @@ calculaAViagemPeloMenorCusto matrizDeCustoPorKm locais = do
     }
   where
     indiceInicial = 0
-    locaisECustosEDistancias = pegarCustosEDistanciaESequenciaDasCidades matrizDeCustoPorKm (locais !! indiceInicial, indiceInicial) locais
+    primeiroLocal = locais !! indiceInicial
+    locaisECustosEDistancias = pegarCustosEDistanciaESequenciaDasCidades matrizDeCustoPorKm (primeiroLocal, indiceInicial) locais
     sequenciaDasCidades = pegarNomeDosLocais locaisECustosEDistancias
     custoTotal = sum $ pegarCustosDaViagem locaisECustosEDistancias
     distanciaTotal = sum $ pegarDistancias locaisECustosEDistancias
