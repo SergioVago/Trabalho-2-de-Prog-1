@@ -47,7 +47,6 @@ encontraOProximoLocalEDistanciaMaisPerto locais distancias = do
 
 pegarDistanciasESequenciaDasCidades :: (Local, Int) -> [Local] -> [(Local, Float)]
 pegarDistanciasESequenciaDasCidades _ [] = []
-pegarDistanciasESequenciaDasCidades _ [ultimoLocal] = [(ultimoLocal, 0)]
 pegarDistanciasESequenciaDasCidades (localAtual, indiceDoLocalAtual) locais = do
   let (_, proximosLocais) = splitAt (indiceDoLocalAtual + 1) locais
 
